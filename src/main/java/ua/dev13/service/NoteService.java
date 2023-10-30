@@ -49,8 +49,11 @@ public class NoteService {
         }
     }
 
-    private Long generatorId(){
-        int index = noteList.size()-1;
-        return noteList.get(index).getId() + 1;
+    private long generatorId() {
+        if (noteList.isEmpty()) {
+            return 0L;
+        } else {
+            return noteList.size();
+        }
     }
 }

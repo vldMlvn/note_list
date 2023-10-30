@@ -9,5 +9,4 @@ public class NoteListApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(NoteListApplication.class, args);
 	}
-
 }
