@@ -1,59 +1,38 @@
 package ua.dev13.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ua.dev13.entity.Note;
+import ua.dev13.repository.NoteRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class NoteService {
-    private final List<Note> noteList = new ArrayList<>();
+    private final NoteRepository repository;
 
     public List<Note> listAll() {
-        return noteList;
+        return repository.findAll();
     }
 
     public Note add(Note note) {
-        Long id = generatorId();
-        note.setId(id);
-        noteList.add(note);
-        return note;
+        return repository.save(note);
     }
 
     public Note getById(long id) {
-        for (Note note : noteList) {
-            if (note.getId() == id) {
-                return note;
-            }
-        }
-       throw new IllegalArgumentException();
+        return repository.findById(id).orElseThrow(IllegalArgumentException::new);
     }
 
     public void deleteById(long id) {
-        Note note = getById(id);
-        if (note == null) {
-            throw new IllegalArgumentException();
-        } else {
-            noteList.remove(note);
-        }
+        repository.deleteById(id);
     }
 
-    public void update(Note note){
-        Note existingNote = getById(note.getId());
-        if(existingNote == null){
+    public void update(Note note) {
+        if (repository.existsById(note.getId())) {
+            repository.save(note);
+        } else {
             throw new IllegalArgumentException();
-        } else {
-            existingNote.setTitle(note.getTitle());
-            existingNote.setContent(note.getContent());
-        }
-    }
-
-    private long generatorId() {
-        if (noteList.isEmpty()) {
-            return 0L;
-        } else {
-            return noteList.size();
         }
     }
 }
