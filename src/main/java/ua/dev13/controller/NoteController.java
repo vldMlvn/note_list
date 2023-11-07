@@ -11,24 +11,24 @@ import ua.dev13.service.NoteService;
 @Controller
 @RequestMapping("/note")
 public class NoteController {
-    private final NoteService noteService;
     private static final String BASE_REDIRECT = "redirect:/note/list";
+    private final NoteService noteService;
 
     @GetMapping("/list")
-    public ModelAndView getAllNotes(){
+    public ModelAndView getAllNotes() {
         ModelAndView result = new ModelAndView("list_notes");
         result.addObject("notes", noteService.listAll());
         return result;
     }
 
     @PostMapping("/delete")
-    public String deleteNoteById(@RequestParam("id")Long id){
+    public String deleteNoteById(@RequestParam("id") Long id) {
         noteService.deleteById(id);
         return BASE_REDIRECT;
     }
 
     @GetMapping("/edit")
-    public ModelAndView editNoteById(@RequestParam("id")Long id){
+    public ModelAndView editNoteById(@RequestParam("id") Long id) {
         ModelAndView result = new ModelAndView("edit_note");
         Note note = noteService.getById(id);
         result.addObject("note", note);
@@ -42,12 +42,12 @@ public class NoteController {
     }
 
     @GetMapping("/create")
-    public ModelAndView createNote(){
+    public ModelAndView createNote() {
         return new ModelAndView("create_note", "note", new Note());
     }
 
     @PostMapping("/create")
-    public String saveCreatingNote(@ModelAttribute("note") Note note){
+    public String saveCreatingNote(@ModelAttribute("note") Note note) {
         noteService.add(note);
         return BASE_REDIRECT;
     }
